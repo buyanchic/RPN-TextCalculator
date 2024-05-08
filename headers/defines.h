@@ -10,6 +10,8 @@
 class Token {
 public:
     virtual void print_info() = 0;
+
+    virtual ~Token() = default;
 };
 
 class Number : public Token {
@@ -22,7 +24,7 @@ public:
 
     virtual void print_info() override {
         std::cout << "Num: " << number << std::endl;
-    };
+    }
 };
 
 class Operator : public Token {
@@ -37,7 +39,7 @@ public:
 
     virtual void print_info() override {
         std::cout << "Op: " << op << std::endl;
-    };
+    }
 };
 
 #endif // HEADERS_DEFINES_H

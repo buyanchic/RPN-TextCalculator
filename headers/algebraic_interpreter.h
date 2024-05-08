@@ -9,12 +9,8 @@
 
 using namespace std;
 
-void get_unary(const string &ex, int &i, list<Token *> &l);
-
-Number get_num(const string &ex, int &i);
-
 /// Считает результат строкового арифметического выражения
-NUMBER_TYPE calculate(string &expression);
+NUMBER_TYPE calculate(const string &expression);
 
 /// Переделывает строку в инфиксную последовательность токенов
 list<Token *> lex(const string &ex);
