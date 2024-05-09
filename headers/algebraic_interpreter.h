@@ -16,7 +16,7 @@ NUMBER_TYPE calculate(const string &expression);
 list<Token *> lex(const string &ex);
 
 /// Переделывает инфиксную последовательность токенов в постфиксную
-list<Token *> rpn_parse(list<Token *> &tokens);
+list<Token *> rpn_parse(list<Token *> &in);
 
 /// Вычисляет результат постфиксной последовательности
 NUMBER_TYPE eval(list<Token *> &tokens);

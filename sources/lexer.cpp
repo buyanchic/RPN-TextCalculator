@@ -28,7 +28,7 @@ NUMBER_TYPE get_mantis(const string &ex, int &i, bool digit_before_dot) {
 }
 
 /// Получить число из выражения, перейти к следующей лексеме
-Number* get_num(const string &ex, int &i) {
+Number *get_num(const string &ex, int &i) {
     NUMBER_TYPE num = 0;
     bool digit_before_dot = false;
     // Чтение числа до точки
@@ -41,6 +41,7 @@ Number* get_num(const string &ex, int &i) {
     if (ex[i] == '.') {
         num += get_mantis(ex, ++i, digit_before_dot);
     }
+    i--;
     return new Number(num);
 }
 
@@ -61,10 +62,33 @@ void get_unary(const string &ex, int &i, list<Token *> &l) {
         l.push_back(new Operator(UNARY_MINUS, UNARY, PREFIX));
 }
 
+/// Проверка наличия конкретного оператора в выражении
+bool the_op_in_exp(const string &ex, const string &op, int &i) {
+    for (int j = 0; j < op.size(); j++)
+        if (ex[j + i] != op[j])
+            return false;
+    return true;
+}
+
+/// Попытка обработки любого определенного оператора в конкретном месте строки
+bool any_op_in_exp(const string &ex, int &i, list<Token *> &l) {
+    auto ops_info = get_operators_info();
+    for (const auto &op: ops_info) {
+        // Влезет ли токен в строку
+        if (get<0>(op).size() > (ex.size() - i)) continue;
+        // Посимвольная проверка токена
+        if (!the_op_in_exp(ex, get<0>(op), i)) continue;
+        // Добавляем токен в список, результат найден
+        l.push_back(new Operator(get<1>(op), get<2>(op), get<3>(op)));
+        i += get<0>(op).size() - 1;
+        return true;
+    }
+    return false;
+}
+
 list<Token *> lex(const string &ex) {
     list<Token *> l = {};
     int expr_size = ex.size();
-    auto ops_info = get_operators_info();
     // Посимвольное чтение
     for (int i = 0; i < expr_size; i++) {
         // Обработка чисел
@@ -78,7 +102,8 @@ list<Token *> lex(const string &ex) {
             continue;
         }
         // Обработка операторов
-
+        if (any_op_in_exp(ex, i, l)) continue;
+        // TODO обработать переменные
         // При нахождении токена обязательно делать continue
         throw runtime_error("Unknown token");
     }

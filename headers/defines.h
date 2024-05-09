@@ -18,11 +18,9 @@ class Number : public Token {
 public:
     NUMBER_TYPE number;
 
-    Number(const NUMBER_TYPE &number)
-        : number(number) {
-    }
+    Number(const NUMBER_TYPE &number) : number(number) {}
 
-    virtual void print_info() override {
+    void print_info() override {
         std::cout << "Num: " << number << std::endl;
     }
 };
@@ -34,10 +32,9 @@ public:
     bool is_prefix;
 
     Operator(const OperatorType &_op, const bool &binary, const bool &prefix)
-        : op(_op), is_binary(binary), is_prefix(prefix) {
-    }
+            : op(_op), is_binary(binary), is_prefix(prefix) {}
 
-    virtual void print_info() override {
+    void print_info() override {
         std::cout << "Op: " << op << std::endl;
     }
 };

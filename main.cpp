@@ -1,14 +1,23 @@
 #include <iostream>
+#include <string>
 
 #include "headers/algebraic_interpreter.h"
 
-using namespace std;
+using std::cout;
+using std::endl;
+using std::cin;
+using std::string;
 
 int main() {
-    list<Token *> l = lex("+1");
-    for (auto t : l) {
+    string s;
+    cout << "Enter expression to calculate:" << endl;
+    cin >> s;
+    list<Token *> l = lex(s);
+    for (auto t: l) {
         t->print_info();
+        delete t;
     }
-    cout << "end of program";
+    // NUMBER_TYPE res = calculate();
+    // cout << "Result: " << endl;
     return 0;
 }
