@@ -10,6 +10,9 @@
 class Token {
 public:
     virtual void print_info() = 0;
+    /// Возвращает true если это оператор, false - число
+    virtual bool check_type() = 0;
+    virtual bool is_bracket_open() = 0;
 
     virtual ~Token() = default;
 };
@@ -23,6 +26,15 @@ public:
     void print_info() override {
         std::cout << "Num: " << number << std::endl;
     }
+
+    bool check_type() override {
+        return 0;
+    }
+
+    bool is_bracket_open() override {
+        return false;
+    }
+
 };
 
 class Operator : public Token {
@@ -36,6 +48,16 @@ public:
 
     void print_info() override {
         std::cout << "Op: " << op << std::endl;
+    }
+
+    bool check_type() override {
+        return 1;
+    }
+
+    bool is_bracket_open() override {
+        if (op==BRACKET_OPEN)
+            return true;
+        return false;
     }
 };
 

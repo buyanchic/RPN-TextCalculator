@@ -2,6 +2,8 @@
 
 #include <cmath>
 #include <stdexcept>
+#include <iostream>
+#include <math.h>
 
 using namespace std;
 
@@ -86,6 +88,32 @@ bool any_op_in_exp(const string &ex, int &i, list<Token *> &l) {
     return false;
 }
 
+/// Проверка буквы
+bool check_lett(const char &s) {
+    if ((int)s >= 97 && (int)s <= 122)
+        return true;
+    return false;
+}
+
+/// Взять значение переменной и вернуть его
+Number *get_var(const char &s) {
+    cout << "Enter " << s << ": " << endl;
+    NUMBER_TYPE v;
+    cin >> v;
+    return new Number(v);
+}
+
+/// Обработка констант
+Number *proc_const(const string &ex, int &i) {
+    if (ex[i] == 'p' && ex[i+1]=='i') {
+        i++;
+        return new Number(M_PI);
+    }
+    if (ex[i] == 'e') {
+        return new Number(M_E);
+    }
+}
+
 list<Token *> lex(const string &ex) {
     list<Token *> l = {};
     int expr_size = ex.size();
@@ -103,7 +131,17 @@ list<Token *> lex(const string &ex) {
         }
         // Обработка операторов
         if (any_op_in_exp(ex, i, l)) continue;
-        // TODO обработать переменные
+
+        // Обработать константы
+        if (ex[i] == 'e' || (ex[i] == 'p' && ex[i+1] =='i')) {
+            l.push_back(proc_const(ex, i));
+            continue;
+        }
+        // TODO Обработать переменные - одна и та же переменная = одно и то же значение и цикличность
+        if (check_lett(ex[i]) && (l.empty() || l.back()->check_type())) {
+            l.push_back(get_var(ex[i]));
+            continue;
+        }
         // При нахождении токена обязательно делать continue
         throw runtime_error("Unknown token");
     }
